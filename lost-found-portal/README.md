@@ -1,5 +1,9 @@
 # Lost & Found Portal
 
+**Developed by:** Krish Singh
+**Course:** BSc Computer Science — Semester 5 Mini Project
+
+A web application that helps students and employees...
 A web application that helps students and employees of a college or
 organization report **lost items** and post **found items**, so that
 belongings can be reunited with their owners quickly.

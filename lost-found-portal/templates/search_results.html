@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Search — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<h3 class="section-title mb-4">Search Items</h3>
+
+<form method="GET" action="{{ url_for('search.search') }}" class="row g-3 mb-5">
+    <div class="col-md-5">
+        <label for="keyword" class="form-label">Item Name</label>
+        <input type="text" class="form-control" id="keyword" name="keyword" placeholder="e.g. Wallet, ID Card..."
+               value="{{ keyword }}">
+    </div>
+    <div class="col-md-4">
+        <label for="category" class="form-label">Category</label>
+        <select class="form-select" id="category" name="category">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button type="submit" class="btn btn-navy w-100"><i class="bi bi-search me-1"></i> Search</button>
+    </div>
+</form>
+
+{% if searched %}
+    <h5 class="mb-3">Lost Items <span class="text-muted">({{ lost_results|length }})</span></h5>
+    {% if lost_results %}
+    <div class="row g-4 mb-5">
+        {% for item in lost_results %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card item-card">
+                <div class="card-header-bar lost"></div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                        <span class="status-pill lost">Lost</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                    <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                    <p class="text-muted mb-1"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+                    <p class="text-muted mb-0"><i class="bi bi-telephone me-1"></i>{{ item.contact }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted mb-5">No matching lost items found.</p>
+    {% endif %}
+
+    <h5 class="mb-3">Found Items <span class="text-muted">({{ found_results|length }})</span></h5>
+    {% if found_results %}
+    <div class="row g-4">
+        {% for item in found_results %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card item-card">
+                <div class="card-header-bar found"></div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                        <span class="status-pill found">Found</span>
+                    </div>
+                    <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                    <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                    <p class="text-muted mb-1"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+                    <p class="text-muted mb-0"><i class="bi bi-telephone me-1"></i>{{ item.contact }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">No matching found items found.</p>
+    {% endif %}
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-search" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 mb-0">Enter an item name or select a category to search.</p>
+</div>
+{% endif %}
+{% endblock %}

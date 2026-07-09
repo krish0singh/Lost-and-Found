@@ -1,0 +1,47 @@
+{# Reusable form fields shared by Add Lost, Add Found, and Edit Lost pages.
+   Expects: `categories` list, and optionally `item` (for edit) or `form` (repopulate after error) #}
+
+<div class="mb-3">
+    <label for="item_name" class="form-label">Item Name</label>
+    <input type="text" class="form-control" id="item_name" name="item_name" required minlength="2"
+           value="{{ (item.item_name if item else (form.item_name if form else '')) }}">
+    <div class="invalid-feedback">Please enter the item name.</div>
+</div>
+
+<div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+    <select class="form-select" id="category" name="category" required>
+        <option value="" disabled {% if not item and not (form and form.category) %}selected{% endif %}>Select a category</option>
+        {% for cat in categories %}
+            {% set current = item.category if item else (form.category if form else '') %}
+            <option value="{{ cat }}" {% if current == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+    </select>
+    <div class="invalid-feedback">Please select a category.</div>
+</div>
+
+<div class="mb-3">
+    <label for="description" class="form-label">Description <span class="text-muted">(optional)</span></label>
+    <textarea class="form-control" id="description" name="description" rows="3">{{ item.description if item else (form.description if form else '') }}</textarea>
+</div>
+
+<div class="mb-3">
+    <label for="location" class="form-label">{{ location_label|default("Location") }}</label>
+    <input type="text" class="form-control" id="location" name="location" required
+           value="{{ item.location if item else (form.location if form else '') }}">
+    <div class="invalid-feedback">Please enter a location.</div>
+</div>
+
+<div class="mb-3">
+    <label for="date" class="form-label">{{ date_label|default("Date") }}</label>
+    <input type="date" class="form-control" id="date" name="date" required
+           value="{{ item.date.strftime('%Y-%m-%d') if item else (form.date if form else '') }}">
+    <div class="invalid-feedback">Please select a date.</div>
+</div>
+
+<div class="mb-3">
+    <label for="contact" class="form-label">Contact Number</label>
+    <input type="tel" class="form-control" id="contact" name="contact" required pattern="[0-9]{7,15}"
+           value="{{ item.contact if item else (form.contact if form else '') }}">
+    <div class="invalid-feedback">Enter a valid contact number (7-15 digits).</div>
+</div>

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Home — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<div class="hero mb-5">
+    <div class="container text-center">
+        <span class="badge badge-tag rounded-pill px-3 py-2 mb-3">Campus Lost &amp; Found</span>
+        <h1 class="mb-3">Lost something? Found something?</h1>
+        <p class="lead mx-auto" style="max-width: 640px;">
+            A single place for students and staff to report lost belongings,
+            post items they've found, and reconnect people with their things —
+            faster than a notice board.
+        </p>
+        <div class="mt-4">
+            {% if session.get('user_id') %}
+                <a href="{{ url_for('lost.add_lost') }}" class="btn btn-amber btn-lg me-2">
+                    <i class="bi bi-exclamation-circle me-1"></i> Report Lost Item
+                </a>
+                <a href="{{ url_for('found.add_found') }}" class="btn btn-outline-light btn-lg">
+                    <i class="bi bi-box-seam me-1"></i> Report Found Item
+                </a>
+            {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-amber btn-lg me-2">Get Started</a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Latest Lost Items -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="section-title mb-0">Recently Reported Lost Items</h3>
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('lost.view_lost') }}" class="text-decoration-none">View my lost items &rarr;</a>
+    {% endif %}
+</div>
+
+{% if latest_lost %}
+<div class="row g-4 mb-5">
+    {% for item in latest_lost %}
+    <div class="col-md-4">
+        <div class="card item-card">
+            <div class="card-header-bar lost"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                    <span class="status-pill lost">Lost</span>
+                </div>
+                <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                <p class="text-muted mb-0"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state mb-5">
+    <i class="bi bi-inbox" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 mb-0">No lost items reported yet.</p>
+</div>
+{% endif %}
+
+<!-- Latest Found Items -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="section-title mb-0">Recently Reported Found Items</h3>
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('found.view_found') }}" class="text-decoration-none">View all found items &rarr;</a>
+    {% endif %}
+</div>
+
+{% if latest_found %}
+<div class="row g-4">
+    {% for item in latest_found %}
+    <div class="col-md-4">
+        <div class="card item-card">
+            <div class="card-header-bar found"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                    <span class="status-pill found">Found</span>
+                </div>
+                <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                <p class="text-muted mb-0"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-inbox" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 mb-0">No found items reported yet.</p>
+</div>
+{% endif %}
+
+{% if not session.get('user_id') %}
+<div class="alert alert-info mt-5 text-center">
+    <i class="bi bi-info-circle me-1"></i>
+    Please <a href="{{ url_for('auth.login') }}">login</a> or <a href="{{ url_for('auth.register') }}">register</a> to report or view full item details.
+</div>
+{% endif %}
+{% endblock %}

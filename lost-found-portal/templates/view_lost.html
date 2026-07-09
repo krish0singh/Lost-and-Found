@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}My Lost Items — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="section-title mb-0">My Lost Items</h3>
+    <a href="{{ url_for('lost.add_lost') }}" class="btn btn-amber">
+        <i class="bi bi-plus-circle me-1"></i> Report Lost Item
+    </a>
+</div>
+
+{% if items %}
+<div class="row g-4">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card item-card">
+            <div class="card-header-bar lost"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                    <span class="status-pill lost">Lost</span>
+                </div>
+                <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                {% if item.description %}
+                <p class="mb-2">{{ item.description }}</p>
+                {% endif %}
+                <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                <p class="text-muted mb-1"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+                <p class="text-muted mb-3"><i class="bi bi-telephone me-1"></i>{{ item.contact }}</p>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('lost.edit_lost', item_id=item.id) }}" class="btn btn-outline-secondary btn-sm flex-fill">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <form method="POST" action="{{ url_for('lost.delete_lost', item_id=item.id) }}" class="confirm-delete flex-fill">
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-inbox" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 mb-3">You haven't reported any lost items yet.</p>
+    <a href="{{ url_for('lost.add_lost') }}" class="btn btn-amber">Report a Lost Item</a>
+</div>
+{% endif %}
+{% endblock %}

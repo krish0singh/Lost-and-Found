@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Found Items — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="section-title mb-0">All Found Items</h3>
+    <a href="{{ url_for('found.add_found') }}" class="btn btn-amber">
+        <i class="bi bi-plus-circle me-1"></i> Report Found Item
+    </a>
+</div>
+
+{% if items %}
+<div class="row g-4">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card item-card">
+            <div class="card-header-bar found"></div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ item.item_name }}</h5>
+                    <span class="status-pill found">Found</span>
+                </div>
+                <p class="text-muted mb-1"><i class="bi bi-tag me-1"></i>{{ item.category }}</p>
+                {% if item.description %}
+                <p class="mb-2">{{ item.description }}</p>
+                {% endif %}
+                <p class="text-muted mb-1"><i class="bi bi-geo-alt me-1"></i>{{ item.location }}</p>
+                <p class="text-muted mb-1"><i class="bi bi-calendar-event me-1"></i>{{ item.date.strftime('%d %b %Y') }}</p>
+                <p class="text-muted mb-1"><i class="bi bi-telephone me-1"></i>{{ item.contact }}</p>
+                <p class="text-muted mb-0"><i class="bi bi-person me-1"></i>Reported by {{ item.owner.username }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <i class="bi bi-inbox" style="font-size: 2.5rem;"></i>
+    <p class="mt-2 mb-3">No found items have been reported yet.</p>
+    <a href="{{ url_for('found.add_found') }}" class="btn btn-amber">Report a Found Item</a>
+</div>
+{% endif %}
+{% endblock %}

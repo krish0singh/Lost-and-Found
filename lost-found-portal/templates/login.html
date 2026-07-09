@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Login — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+        <h3 class="text-center mb-1">Welcome Back</h3>
+        <p class="text-muted text-center mb-4">Login to manage your lost &amp; found reports</p>
+
+        <form method="POST" action="{{ url_for('auth.login') }}" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username"
+                       value="{{ username or '' }}" required minlength="3">
+                <div class="invalid-feedback">Please enter your username.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                <div class="invalid-feedback">Please enter your password.</div>
+            </div>
+
+            <button type="submit" class="btn btn-navy w-100">Login</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

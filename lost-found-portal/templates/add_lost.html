@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Report Lost Item — Lost & Found Portal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <h4 class="mb-1"><i class="bi bi-exclamation-circle text-danger me-1"></i> Report a Lost Item</h4>
+                <p class="text-muted mb-4">Fill in the details below so others can help you find it.</p>
+
+                <form method="POST" action="{{ url_for('lost.add_lost') }}" class="needs-validation" novalidate>
+                    {% set location_label = "Lost Location" %}
+                    {% set date_label = "Lost Date" %}
+                    {% include "_item_form_fields.html" with context %}
+                    <button type="submit" class="btn btn-navy w-100 mt-2">Submit Lost Item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
